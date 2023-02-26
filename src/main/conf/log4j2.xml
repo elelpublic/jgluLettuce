@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<Configuration status="WARN">
+
+    <Appenders>
+
+        <Console name="all" target="SYSTEM_OUT">
+            <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>
+        </Console>
+
+        <RollingFile name="main"
+             fileName="target/main.log"
+             filePattern="target/app.log.%i">
+            <PatternLayout pattern="%-5p %d{yyyy-MM-dd HH:mm:ss} %m%n"/>
+            <Policies>
+                <SizeBasedTriggeringPolicy size="1MB" />
+            </Policies>
+            <DefaultRolloverStrategy fileIndex="min" max="3"/>
+        </RollingFile>
+
+    </Appenders>
+
+    <Loggers>
+        <Root level="warn">
+            <AppenderRef ref="all"/>
+        </Root>
+        <Logger level="info" name="all">
+            <AppenderRef ref="all"/>
+        </Logger>
+        <Logger level="debug" name="main">
+            <AppenderRef ref="main"/>
+        </Logger>
+    </Loggers>
+
+</Configuration>
+

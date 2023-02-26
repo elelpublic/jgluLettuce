@@ -1,0 +1,67 @@
+<component name="libraryTable">
+  <library name="idea">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/target/idea/commons-cli-1.5.0-sources.jar!/" />
+      <root url="jar://$PROJECT_DIR$/target/idea/commons-compress-1.21.jar!/" />
+      <root url="jar://$PROJECT_DIR$/target/idea/disruptor-3.4.4.jar!/" />
+      <root url="jar://$PROJECT_DIR$/target/idea/javax.activation-api-1.2.0.jar!/" />
+      <root url="jar://$PROJECT_DIR$/target/idea/log4j-core-2.19.0-javadoc.jar!/" />
+      <root url="jar://$PROJECT_DIR$/target/idea/slf4j-api-2.0.6-sources.jar!/" />
+      <root url="jar://$PROJECT_DIR$/target/idea/javax.mail-api-1.6.2.jar!/" />
+      <root url="jar://$PROJECT_DIR$/target/idea/kafka-clients-1.1.1.jar!/" />
+      <root url="jar://$PROJECT_DIR$/target/idea/commons-csv-1.9.0.jar!/" />
+      <root url="jar://$PROJECT_DIR$/target/idea/snappy-java-1.1.7.1.jar!/" />
+      <root url="jar://$PROJECT_DIR$/target/idea/log4j-core-2.19.0.jar!/" />
+      <root url="jar://$PROJECT_DIR$/target/idea/activation-1.1.jar!/" />
+      <root url="jar://$PROJECT_DIR$/target/idea/jackson-dataformat-xml-2.13.4.jar!/" />
+      <root url="jar://$PROJECT_DIR$/target/idea/log4j-slf4j2-impl-2.19.0-javadoc.jar!/" />
+      <root url="jar://$PROJECT_DIR$/target/idea/disruptor-1.2.15.jar!/" />
+      <root url="jar://$PROJECT_DIR$/target/idea/hamcrest-core-1.3.jar!/" />
+      <root url="jar://$PROJECT_DIR$/target/idea/hamcrest-2.2-javadoc.jar!/" />
+      <root url="jar://$PROJECT_DIR$/target/idea/junit-4.13.2-sources.jar!/" />
+      <root url="jar://$PROJECT_DIR$/target/idea/log4j-slf4j2-impl-2.19.0-sources.jar!/" />
+      <root url="jar://$PROJECT_DIR$/target/idea/hamcrest-2.2.jar!/" />
+      <root url="jar://$PROJECT_DIR$/target/idea/mxparser-1.2.2.jar!/" />
+      <root url="jar://$PROJECT_DIR$/target/idea/junit-4.13.2-javadoc.jar!/" />
+      <root url="jar://$PROJECT_DIR$/target/idea/log4j-core-2.19.0-sources.jar!/" />
+      <root url="jar://$PROJECT_DIR$/target/idea/junit-4.13.2.jar!/" />
+      <root url="jar://$PROJECT_DIR$/target/idea/log4j-api-2.19.0-javadoc.jar!/" />
+      <root url="jar://$PROJECT_DIR$/target/idea/log4j-api-2.19.0.jar!/" />
+      <root url="jar://$PROJECT_DIR$/target/idea/gpars-1.2.1.jar!/" />
+      <root url="jar://$PROJECT_DIR$/target/idea/lz4-java-1.4.1.jar!/" />
+      <root url="jar://$PROJECT_DIR$/target/idea/jctools-core-3.3.0.jar!/" />
+      <root url="jar://$PROJECT_DIR$/target/idea/jackson-annotations-2.13.4.jar!/" />
+      <root url="jar://$PROJECT_DIR$/target/idea/snakeyaml-1.31.jar!/" />
+      <root url="jar://$PROJECT_DIR$/target/idea/jeromq-0.5.2.jar!/" />
+      <root url="jar://$PROJECT_DIR$/target/idea/hamcrest-2.2-sources.jar!/" />
+      <root url="jar://$PROJECT_DIR$/target/idea/jnacl-1.0.0.jar!/" />
+      <root url="jar://$PROJECT_DIR$/target/idea/org.osgi.core-6.0.0.jar!/" />
+      <root url="jar://$PROJECT_DIR$/target/idea/slf4j-api-2.0.6.jar!/" />
+      <root url="jar://$PROJECT_DIR$/target/idea/javax.jms-api-2.0.1.jar!/" />
+      <root url="jar://$PROJECT_DIR$/target/idea/commons-cli-1.5.0-javadoc.jar!/" />
+      <root url="jar://$PROJECT_DIR$/target/idea/jsr166y-1.7.0.jar!/" />
+      <root url="jar://$PROJECT_DIR$/target/idea/log4j-api-2.19.0-sources.jar!/" />
+      <root url="jar://$PROJECT_DIR$/target/idea/groovy-4.0.5.jar!/" />
+      <root url="jar://$PROJECT_DIR$/target/idea/jackson-databind-2.13.4.jar!/" />
+      <root url="jar://$PROJECT_DIR$/target/idea/slf4j-api-2.0.6-javadoc.jar!/" />
+      <root url="jar://$PROJECT_DIR$/target/idea/jansi-2.4.0.jar!/" />
+      <root url="jar://$PROJECT_DIR$/target/idea/commons-cli-1.5.0.jar!/" />
+      <root url="jar://$PROJECT_DIR$/target/idea/woodstox-core-6.3.1.jar!/" />
+      <root url="jar://$PROJECT_DIR$/target/idea/multiverse-core-0.7.0.jar!/" />
+      <root url="jar://$PROJECT_DIR$/target/idea/xstream-1.4.19.jar!/" />
+      <root url="jar://$PROJECT_DIR$/target/idea/commons-lang3-3.12.0.jar!/" />
+      <root url="jar://$PROJECT_DIR$/target/idea/slf4j-ext-2.0.0.jar!/" />
+      <root url="jar://$PROJECT_DIR$/target/idea/commons-lang3-3.12.0-javadoc.jar!/" />
+      <root url="jar://$PROJECT_DIR$/target/idea/jackson-dataformat-yaml-2.13.4.jar!/" />
+      <root url="jar://$PROJECT_DIR$/target/idea/stax2-api-4.2.1.jar!/" />
+      <root url="jar://$PROJECT_DIR$/target/idea/groovy-4.0.5-sources.jar!/" />
+      <root url="jar://$PROJECT_DIR$/target/idea/javax.mail-1.6.2.jar!/" />
+      <root url="jar://$PROJECT_DIR$/target/idea/groovy-4.0.5-javadoc.jar!/" />
+      <root url="jar://$PROJECT_DIR$/target/idea/log4j-slf4j2-impl-2.19.0.jar!/" />
+      <root url="jar://$PROJECT_DIR$/target/idea/jackson-core-2.13.4.jar!/" />
+      <root url="jar://$PROJECT_DIR$/target/idea/commons-lang3-3.12.0-sources.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

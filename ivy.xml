@@ -1,0 +1,59 @@
+<ivy-module version="2.0">
+
+    <info organisation="com.infodesire"
+          module="sampleApp"/>
+
+    <dependencies>
+
+        <!-- https://mvnrepository.com/artifact/junit/junit -->
+        <dependency org="junit" name="junit" rev="${junit.version}"/>
+
+        <!--
+        https://mvnrepository.com/artifact/org.hamcrest/hamcrest
+
+        Hamcrest is used by junit4
+        -->
+        <dependency org="org.hamcrest" name="hamcrest" rev="${hamcrest.version}"/>
+
+        <!--
+        https://mvnrepository.com/artifact/org.apache.commons/commons-lang3
+
+        We use this library only to show how to include thirdparty libs in the build process
+        -->
+        <dependency org="org.apache.commons" name="commons-lang3" rev="${commons-lang3.version}"/>
+
+        <!--
+        https://mvnrepository.com/artifact/org.apache.groovy/groovy
+
+        We use groovy only to perform script tasks in the ant build script
+        -->
+        <dependency org="org.apache.groovy" name="groovy" rev="${groovy.version}"/>
+
+
+        <!--
+        https://mvnrepository.com/artifact/commons-cli/commons-cli
+
+        Easy command line parameter support.
+        -->
+        <dependency org="commons-cli" name="commons-cli" rev="${commons-cli.version}"/>
+
+        <!--
+        https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-core
+
+        Log4j for logging
+        -->
+        <dependency org="org.apache.logging.log4j" name="log4j-api" rev="${log4j.version}" />
+        <dependency org="org.apache.logging.log4j" name="log4j-core" rev="${log4j.version}" />
+
+        <!--
+        https://mvnrepository.com/artifact/org.slf4j/slf4j-api
+        https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-slf4j2-impl
+
+        Slf4j for logging abstraction
+        -->
+        <dependency org="org.slf4j" name="slf4j-api" rev="${slf4j.version}"/>
+        <dependency org="org.apache.logging.log4j" name="log4j-slf4j2-impl" rev="${log4j.version}"/>
+
+    </dependencies>
+
+</ivy-module>
