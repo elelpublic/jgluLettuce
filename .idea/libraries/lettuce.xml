@@ -1,0 +1,30 @@
+<component name="libraryTable">
+  <library name="lettuce">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/lib/netty-transport-native-unix-common-4.1.89.Final.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/netty-buffer-4.1.89.Final.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/netty-codec-4.1.89.Final.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/netty-codec-dns-4.1.89.Final.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/netty-common-4.1.89.Final.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/netty-handler-4.1.89.Final.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/netty-incubator-transport-classes-io_uring-0.0.17.Final.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/netty-incubator-transport-native-io_uring-0.0.17.Final-linux-x86_64.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/netty-resolver-4.1.89.Final.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/netty-resolver-dns-4.1.89.Final.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/netty-transport-4.1.89.Final.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/netty-transport-classes-epoll-4.1.89.Final.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/netty-transport-classes-kqueue-4.1.89.Final.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/netty-transport-native-epoll-4.1.89.Final-linux-x86_64.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/lettuce-core-6.2.3.RELEASE.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/reactive-streams-1.0.4.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/reactor-core-3.4.27.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$PROJECT_DIR$/lib/lettuce-core-6.2.3.RELEASE-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$PROJECT_DIR$/lib/lettuce-core-6.2.3.RELEASE-sources.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/lettuce-core-6.2.3.RELEASE-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

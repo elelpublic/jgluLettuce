@@ -6,6 +6,31 @@
 
         <property file="project.properties" />
 
+        <path id="thirdparty.jars">
+            <pathelement location="lib/commons-lang3-${commons-lang3.version}.jar" />
+            <pathelement location="lib/commons-cli-${commons-cli.version}.jar" />
+            <pathelement location="lib/log4j-api-${log4j.version}.jar" />
+            <pathelement location="lib/log4j-core-${log4j.version}.jar" />
+            <pathelement location="lib/slf4j-api-${slf4j.version}.jar" />
+            <pathelement location="lib/log4j-slf4j2-impl-${log4j.version}.jar" />
+            <pathelement location="lib/lettuce-core-${lettuce.version}.jar" />
+            <pathelement location="lib/reactive-streams-${reactive-streams.version}.jar" />
+            <pathelement location="lib/reactor-core-${reactor-core.version}.jar" />
+            <pathelement location="lib/netty-transport-${netty.version}.jar" />
+            <pathelement location="lib/netty-common-${netty.version}.jar" />
+            <pathelement location="lib/netty-handler-${netty.version}.jar" />
+            <pathelement location="lib/netty-resolver-${netty.version}.jar" />
+            <pathelement location="lib/netty-buffer-${netty.version}.jar" />
+            <pathelement location="lib/netty-codec-${netty.version}.jar" />
+            <pathelement location="lib/embedded-redis-${embedded-redis.version}.jar" />
+            <pathelement location="lib/guava-${guava.version}.jar" />
+        </path>
+
+        <path id="junit.jars">
+            <pathelement location="lib/junit-${junit.version}.jar" />
+            <pathelement location="lib/hamcrest-${hamcrest.version}.jar" />
+        </path>
+
     </target>
 
     <target name="setup.ivy" depends="properties" >
@@ -35,8 +60,10 @@
         </groovy>
     </target>
 
-    <target name="fetchlibs" depends="tools.install, setup.ivy">
-        <ivy:retrieve />
+    <target name="fetchlibs" depends="tools.install, setup.ivy" unless="fetchlibs.done">
+        <ivy:retrieve log="quiet"/>
+        <!-- ivy throws some weird exception when called twice in a run -->
+        <property name="fetchlibs.done" value="true"/>
     </target>
 
     <target name="compile" depends="fetchlibs">
@@ -47,50 +74,41 @@
                 debug="true"
         >
             <src path="src/main/java" />
-            <src path="src/test/java" />
+            <classpath refid="thirdparty.jars"/>
+        </javac>
+        <mkdir dir="target/test-classes" />
+        <javac
+                srcdir="src/test/java"
+                destdir="target/test-classes"
+                debug="true"
+        >
             <classpath>
-                <pathelement location="lib/commons-lang3-${commons-lang3.version}.jar" />
-                <pathelement location="lib/commons-cli-${commons-cli.version}.jar" />
-                <pathelement location="lib/log4j-api-${log4j.version}.jar" />
-                <pathelement location="lib/log4j-core-${log4j.version}.jar" />
-                <pathelement location="lib/slf4j-api-${slf4j.version}.jar" />
-                <pathelement location="lib/log4j-slf4j2-impl-${log4j.version}.jar" />
+                <pathelement path="target/classes"/>
             </classpath>
+            <classpath refid="thirdparty.jars"/>
+        </javac>
+        <mkdir dir="target/integration-classes" />
+        <javac
+                srcdir="src/integration/java"
+                destdir="target/integration-classes"
+                debug="true"
+        >
+            <classpath>
+                <pathelement path="target/classes"/>
+            </classpath>
+            <classpath refid="thirdparty.jars"/>
         </javac>
     </target>
 
-    <target name="hello.help">
-        <property name="commandline" value="help" />
-        <antcall target="hello" />
-    </target>
-
-    <target name="hello.world">
-        <property name="commandline" value="-l world" />
-        <antcall target="hello" />
-    </target>
-
-    <target name="hello.repeat">
-        <property name="commandline" value="-r 5 world" />
-        <antcall target="hello" />
-    </target>
-
-    <target name="hello" depends="test-quietly">
-        <property name="commandline" value="world" />
+    <target name="cli" depends="test-quietly">
+        <property name="commandline" value="-i" />
         <java
             classpath="target/classes"
-            classname="com.infodesire.sample.Main"
+            classname="com.infodesire.rcache.Main"
             fork="true"
             >
             <arg line="${commandline}" />
-
-            <classpath>
-                <pathelement location="lib/commons-lang3-${commons-lang3.version}.jar" />
-                <pathelement location="lib/commons-cli-${commons-cli.version}.jar" />
-                <pathelement location="lib/log4j-api-${log4j.version}.jar" />
-                <pathelement location="lib/log4j-core-${log4j.version}.jar" />
-                <pathelement location="lib/slf4j-api-${slf4j.version}.jar" />
-                <pathelement location="lib/log4j-slf4j2-impl-${log4j.version}.jar" />
-            </classpath>
+            <classpath refid="thirdparty.jars"/>
         </java>
     </target>
 
@@ -107,7 +125,6 @@
     </target>
 
     <target name="test" depends="test.run">
-        <fail if="failures" ></fail>
         <groovy>
             import java.awt.Desktop;
             if (Desktop.isDesktopSupported()) {
@@ -121,10 +138,29 @@
             }
             }
         </groovy>
+        <fail if="failures" ></fail>
     </target>
 
     <target name="test-quietly" depends="test.run">
         <fail if="failures" ></fail>
+    </target>
+
+
+    <target name="integration" depends="test-quietly, integration.run">
+        <groovy>
+            import java.awt.Desktop;
+            if (Desktop.isDesktopSupported()) {
+            try {
+            Desktop desktop = Desktop.getDesktop();
+            File myFile = new File("target/integration-report/report/junit-noframes.html");
+            desktop.open(myFile);
+            }
+            catch (IOException ex) {
+            ex.printStackTrace();
+            }
+            }
+        </groovy>
+        <fail if="failures" />
     </target>
 
 
@@ -143,6 +179,7 @@
             <classpath>
                 <fileset dir="lib" />
                 <pathelement location="target/classes" />
+                <pathelement location="target/test-classes"/>
             </classpath>
 
             <batchtest
@@ -151,7 +188,7 @@
                     todir="target/test-generated-files"
             >
 
-                <fileset dir="target/classes" >
+                <fileset dir="target/test-classes" >
                     <include name="${test.include}" />
                 </fileset>
 
@@ -170,6 +207,49 @@
         </junitreport>
 
     </target>
+
+    <target name="integration.run" depends="compile">
+
+        <mkdir dir="target/integration-generated-files"/>
+        <junit
+                fork="true"
+                printsummary="on"
+                timeout="600000"
+        >
+            <!-- fork:true is necessary, because some tests use ant themselves -->
+
+            <classpath>
+                <fileset dir="lib"/>
+                <pathelement location="target/classes"/>
+                <pathelement location="target/integration-classes"/>
+            </classpath>
+
+            <batchtest
+                    failureproperty="failures"
+                    errorproperty="failures"
+                    todir="target/integration-generated-files"
+            >
+
+                <fileset dir="target/integration-classes">
+                    <include name="**/*Test.class"/>
+                </fileset>
+
+            </batchtest>
+
+            <formatter type="xml"/>
+
+        </junit>
+
+        <mkdir dir="target/integration-report"/>
+        <junitreport todir="target/integration-report">
+            <fileset dir="target/integration-generated-files">
+                <include name="TEST-*.xml"/>
+            </fileset>
+            <report format="noframes" todir="target/integration-report/report"/>
+        </junitreport>
+
+    </target>
+
 
     <target name="clean">
         <delete dir="target" />
@@ -192,10 +272,7 @@ ant hello.groovy .............. Test the groovy installation
 ant clean ..................... Delete generated files
 ant clean.all ................. Delete all generated or downloaded files
 ant test ...................... Run unit tests
-ant hello ..................... Run program
-ant hello.world ............... Run program with "-l" option
-ant hello.repeat .............. Run program with "-r 5" option
-ant hello.help ................ Run program with "help" command
+ant cli ....................... Run interactive mode
 
         </echo>
     </target>

@@ -1,5 +1,4 @@
-# template_Ant_Ivy_Logging
+# rcache
 
-A sample projectile with logging.
+Use redis as a backend for a distributed cache.
 
-Based on https://github.com/elelpublic/template_Ant_Ivy

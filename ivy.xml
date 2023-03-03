@@ -1,4 +1,4 @@
-<ivy-module version="2.0">
+<ivy-module version="2.0" >
 
     <info organisation="com.infodesire"
           module="sampleApp"/>
@@ -53,6 +53,52 @@
         -->
         <dependency org="org.slf4j" name="slf4j-api" rev="${slf4j.version}"/>
         <dependency org="org.apache.logging.log4j" name="log4j-slf4j2-impl" rev="${log4j.version}"/>
+
+
+        <!--
+        https://mvnrepository.com/artifact/io.lettuce/lettuce-core
+
+        The redis client
+
+        -->
+        <dependency org="io.lettuce" name="lettuce-core" rev="${lettuce.version}" >
+            <exclude module="netty-tcnative" />  <!-- not available for macos arm -->
+        </dependency>
+        <!--
+        https://mvnrepository.com/artifact/org.reactivestreams/reactive-streams
+
+        A dependency of lettuce
+        <dependency org="org.reactivestreams" name="reactive-streams" rev="1.0.4"/>
+        -->
+
+        <!--
+        https://mvnrepository.com/artifact/io.projectreactor/reactor-core
+
+        A dependency of lettuce
+        <dependency org="io.projectreactor" name="reactor-core" rev="3.5.3"/>
+        -->
+
+        <!--
+        https://mvnrepository.com/artifact/com.github.kstyrc/embedded-redis
+
+        An embedded redis used in unit tests.
+        -->
+        <dependency org="com.github.kstyrc" name="embedded-redis" rev="${embedded-redis.version}"/>
+
+        <!--
+        https://mvnrepository.com/artifact/com.google.guava/guava
+
+        a dependency if enbedded-redis
+        -->
+        <dependency org="com.google.guava" name="guava" rev="${guava.version}"/>
+
+        <!--
+        https://mvnrepository.com/artifact/commons-io/commons-io
+
+        a dependency if enbedded-redis
+        -->
+        <dependency org="commons-io" name="commons-io" rev="${commons-io.version}"/>
+
 
     </dependencies>
 
