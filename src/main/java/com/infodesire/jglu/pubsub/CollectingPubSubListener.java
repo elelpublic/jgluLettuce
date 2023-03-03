@@ -1,4 +1,4 @@
-package com.infodesire.rcache.pubsub;
+package com.infodesire.jglu.pubsub;
 
 import com.google.common.collect.EvictingQueue;
 

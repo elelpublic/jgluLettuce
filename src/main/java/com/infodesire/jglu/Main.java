@@ -1,4 +1,4 @@
-package com.infodesire.rcache;
+package com.infodesire.jglu;
 
 import io.lettuce.core.RedisClient;
 import io.lettuce.core.api.StatefulRedisConnection;
@@ -35,7 +35,7 @@ public class Main {
     loggerAll.info( "Logging to file target/main.log" );
     loggerMain.info( "App startup" );
 
-    print( "rcache 0.1" );
+    print( "jglu 0.1" );
     print( "Running as " + SystemUtils.getUserName() + "@" + InetAddress.getLocalHost().getHostName() );
     print( "" );
 
@@ -81,7 +81,7 @@ public class Main {
       while( true ) {
 
         System.out.println( "(? for help)" );
-        System.out.println( "rcache> " );
+        System.out.println( "jglu> " );
 
         String line = in.readLine().trim();
         System.out.println( "" );

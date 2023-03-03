@@ -1,4 +1,4 @@
-package com.infodesire.rcache;
+package com.infodesire.jglu;
 
 import io.lettuce.core.RedisClient;
 import io.lettuce.core.api.StatefulRedisConnection;
@@ -6,10 +6,6 @@ import io.lettuce.core.api.sync.RedisCommands;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
-
-import java.util.List;
-
-import static org.junit.Assert.*;
 
 public class RedisPerformanceEvaluationTest {
 

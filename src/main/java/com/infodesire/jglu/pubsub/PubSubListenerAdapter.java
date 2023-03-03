@@ -1,4 +1,4 @@
-package com.infodesire.rcache.pubsub;
+package com.infodesire.jglu.pubsub;
 
 import io.lettuce.core.pubsub.RedisPubSubListener;
 

@@ -104,7 +104,7 @@
         <property name="commandline" value="-i" />
         <java
             classpath="target/classes"
-            classname="com.infodesire.rcache.Main"
+            classname="com.infodesire.jglu.Main"
             fork="true"
             >
             <arg line="${commandline}" />

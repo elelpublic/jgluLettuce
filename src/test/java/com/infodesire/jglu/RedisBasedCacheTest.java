@@ -1,6 +1,6 @@
-package com.infodesire.rcache;
+package com.infodesire.jglu;
 
-import com.infodesire.rcache.util.SocketUtils;
+import com.infodesire.jglu.util.SocketUtils;
 import io.lettuce.core.RedisClient;
 import io.lettuce.core.api.StatefulRedisConnection;
 import org.junit.After;

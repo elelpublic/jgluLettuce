@@ -2,9 +2,7 @@
   <library name="embedded-redis">
     <CLASSES>
       <root url="jar://$PROJECT_DIR$/lib/embedded-redis-0.6.jar!/" />
-      <root url="jar://$PROJECT_DIR$/lib/guava-18.0.jar!/" />
       <root url="jar://$PROJECT_DIR$/lib/guava-31.1-jre.jar!/" />
-      <root url="jar://$PROJECT_DIR$/lib/commons-io-2.4.jar!/" />
       <root url="jar://$PROJECT_DIR$/lib/commons-io-2.11.0.jar!/" />
     </CLASSES>
     <JAVADOC>

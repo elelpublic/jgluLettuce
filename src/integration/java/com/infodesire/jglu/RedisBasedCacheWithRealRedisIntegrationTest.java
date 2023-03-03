@@ -1,4 +1,4 @@
-package com.infodesire.rcache;
+package com.infodesire.jglu;
 
 import io.lettuce.core.RedisClient;
 import io.lettuce.core.api.StatefulRedisConnection;
@@ -36,20 +36,20 @@ public class RedisBasedCacheWithRealRedisIntegrationTest {
     @Test
     public void testCaching() {
 
-        RedisBasedCache rcache = new RedisBasedCache( connection, prefix );
-        assertFalse( rcache.has( "value1" ) );
+        RedisBasedCache redisCache = new RedisBasedCache( connection, prefix );
+        assertFalse( redisCache.has( "value1" ) );
 
-        rcache.put( "value1", "First value!" );
-        assertTrue( rcache.has( "value1" ) );
+        redisCache.put( "value1", "First value!" );
+        assertTrue( redisCache.has( "value1" ) );
 
-        assertEquals( "First value!", rcache.get( "value1" ) );
-        List<String> keys = rcache.find( "value*" );
+        assertEquals( "First value!", redisCache.get( "value1" ) );
+        List<String> keys = redisCache.find( "value*" );
         assertEquals( 1, keys.size() );
         assertEquals( "value1", keys.get( 0 ) );
 
-        rcache.remove( "value1" );
-        assertFalse( rcache.has( "value1" ) );
-        assertEquals( 0, rcache.find( "value1" ).size() );
+        redisCache.remove( "value1" );
+        assertFalse( redisCache.has( "value1" ) );
+        assertEquals( 0, redisCache.find( "value1" ).size() );
 
     }
 

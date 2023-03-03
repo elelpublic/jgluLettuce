@@ -1,4 +1,4 @@
-package com.infodesire.rcache;
+package com.infodesire.jglu;
 
 import io.lettuce.core.api.StatefulRedisConnection;
 import io.lettuce.core.api.sync.RedisCommands;

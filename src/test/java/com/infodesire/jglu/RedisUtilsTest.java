@@ -1,9 +1,9 @@
-package com.infodesire.rcache;
+package com.infodesire.jglu;
 
-import com.infodesire.rcache.pubsub.CollectingPubSubListener;
-import com.infodesire.rcache.pubsub.PubSubMessage;
-import static com.infodesire.rcache.pubsub.PubSubMessage.Type.*;
-import com.infodesire.rcache.util.SocketUtils;
+import com.infodesire.jglu.pubsub.CollectingPubSubListener;
+import com.infodesire.jglu.pubsub.PubSubMessage;
+import static com.infodesire.jglu.pubsub.PubSubMessage.Type.*;
+import com.infodesire.jglu.util.SocketUtils;
 import io.lettuce.core.RedisClient;
 import io.lettuce.core.api.StatefulRedisConnection;
 import io.lettuce.core.pubsub.StatefulRedisPubSubConnection;
