@@ -3,7 +3,6 @@ package com.infodesire.jglu.busdata;
 import org.apache.commons.lang3.time.FastDateFormat;
 
 import java.text.ParseException;
-import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
@@ -107,7 +106,23 @@ public class BusValue {
      * Create integer typed value
      *
      */
+    public BusValue( Integer intValue ) {
+        set( intValue );
+    }
+
+    /**
+     * Create integer typed value
+     *
+     */
     public BusValue( Double floatValue ) {
+        set( floatValue );
+    }
+
+    /**
+     * Create integer typed value
+     *
+     */
+    public BusValue( Float floatValue ) {
         set( floatValue );
     }
 
@@ -152,7 +167,17 @@ public class BusValue {
         value = floatValue;
     }
 
+    private void set( Float floatValue ) {
+        this.type = BusType.FLOAT;
+        value = floatValue;
+    }
+
     private void set( Long intValue ) {
+        this.type = BusType.INTEGER;
+        value = intValue;
+    }
+
+    private void set( Integer intValue ) {
         this.type = BusType.INTEGER;
         value = intValue;
     }
@@ -226,6 +251,26 @@ public class BusValue {
 
     public Date getDate() {
         return (Date) value;
+    }
+
+    public List<String> getList() {
+        return (List<String>) value;
+    }
+
+    public Boolean getBoolean() {
+        return (Boolean) value;
+    }
+
+    public Long getInteger() {
+        return (Long) value;
+    }
+
+    public Double getFloat() {
+        return (Double) value;
+    }
+
+    public String getString() {
+        return (String) value;
     }
 
 }

@@ -2,20 +2,13 @@ package com.infodesire.jglu.busdata;
 
 import org.junit.Test;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
+import static com.infodesire.jglu.util.ListUtils.l;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 
 public class ListFormatTest {
-
-    private static List<String> l( String... words ) {
-        List<String> result = new ArrayList<>();
-        Collections.addAll( result, words );
-        return result.size() == 0 ? null : result;
-    }
 
     @Test
     public void escape() {
