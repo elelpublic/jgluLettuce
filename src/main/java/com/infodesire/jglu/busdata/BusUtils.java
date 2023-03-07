@@ -16,15 +16,14 @@ public class BusUtils {
     /**
      * Store a business object in redis
      *
-     * @param key Key
+     * @param connection Redis connection
      * @param object Business object
      *
      */
     public static void set( StatefulRedisConnection<String, String> connection,
-                            String key,
                             BusObject object ) {
 
-        RedisUtils.setMap( connection, key, makeMap( object ) );
+        RedisUtils.setMap( connection, object.getKey(), makeMap( object ) );
 
     }
 

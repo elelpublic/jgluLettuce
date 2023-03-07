@@ -50,7 +50,7 @@ public class BusUtilsTest {
         e1.set( "Id", new BusValue( INTEGER, "2102" ) );
         e1.set( "Name", new BusValue( BusType.STRING, "DeMorgan" ) );
 
-        BusUtils.set( connection, e1.getKey(), e1 );
+        BusUtils.set( connection, e1 );
         assertEquals( 1, (long) connection.sync().exists( "employee:1" ) );
 
         BusObject e2 = BusUtils.get( connection, e1.getKey(), template );
