@@ -166,7 +166,7 @@ public class Main {
                 long time = t1 - t0;
                 long count = index - c0;
                 double rate = Math.round( ( (double) count / (double) time ) * 1000 );
-                double percent = Math.round( (double) index / (double) total );
+                double percent = Math.round( ( (double) index / (double) total ) * 100.0 );
                 System.out.println( index + "/" + total + " (" + percent + ") " + rate + " del/s" );
                 t0 = t1;
                 c0 = index;
