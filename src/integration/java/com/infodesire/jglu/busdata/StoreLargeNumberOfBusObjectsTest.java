@@ -75,8 +75,9 @@ public class StoreLargeNumberOfBusObjectsTest {
 
             if( i % 1000 == 0 ) {
                 long t1 = System.currentTimeMillis();
-                double rate = ( (double) c0 / (double) ( t1 - t0 ) ) * 1000;
-                System.out.println( "#" + i + " Create rate: " + rate + " objects/s" );
+                double rate = Math.round( ( (double) c0 / (double) ( t1 - t0 ) ) * 1000 );
+                double percent = Math.round( ( (double) i / (double) OBJECT_COUNT ) * 100.0 );
+                System.out.println( "#" + i + "/" + OBJECT_COUNT + " (" + percent + " %) Create rate: " + rate + " objects/s" );
                 t0 = System.currentTimeMillis();
                 c0 = 0;
             }

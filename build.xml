@@ -179,6 +179,7 @@
         <junit
                 fork="true"
                 printsummary="on"
+                showoutput="true"
         >
             <!-- fork:true is necessary, because some tests use ant themselves -->
 
@@ -221,6 +222,7 @@
                 fork="true"
                 printsummary="on"
                 timeout="600000"
+                showoutput="true"
         >
             <!-- fork:true is necessary, because some tests use ant themselves -->
 
