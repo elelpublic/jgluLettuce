@@ -1,10 +1,13 @@
 package com.infodesire.jglu.busdata;
 
-import org.apache.commons.lang3.time.FastDateFormat;
-
 import java.text.ParseException;
-import java.util.Date;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.List;
+import java.util.regex.PatternSyntaxException;
 
 /**
  * An immutable value in a business object of one of the most used types in such objects.
@@ -16,9 +19,9 @@ import java.util.List;
  */
 public class BusValue {
 
-    static final FastDateFormat dateFormat = FastDateFormat.getInstance( "yyyy-MM-dd" );
-    static final FastDateFormat dateTimeFormat = FastDateFormat.getInstance( "yyyy-MM-dd_HH:mm:ss" );
-    static final FastDateFormat timeFormat = FastDateFormat.getInstance( "HH:mm:ss" );
+    static final DateTimeFormatter dateFormat = DateTimeFormatter.ISO_LOCAL_DATE; // yyyy-MM-dd
+    static final DateTimeFormatter dateTimeFormat = DateTimeFormatter.ISO_LOCAL_DATE_TIME; // yyyy-MM-ddTHH:mm:ss
+    static final DateTimeFormatter timeFormat = DateTimeFormatter.ISO_LOCAL_TIME; // HH:mm:ss
 
     private BusType type;
     private Object value;
@@ -60,13 +63,28 @@ public class BusValue {
             }
         }
         else if( type == BusType.DATE ) {
-            value = dateFormat.parse( stringValue );
+            try {
+                value = LocalDate.parse( stringValue );
+            }
+            catch( DateTimeParseException ex ) {
+                throw new ParseException( stringValue, 0 );
+            }
         }
         else if( type == BusType.DATETIME) {
-            value = dateTimeFormat.parse( stringValue );
+            try {
+                value = LocalDateTime.parse( stringValue );
+            }
+            catch( DateTimeParseException ex ) {
+                throw new ParseException( stringValue, 0 );
+            }
         }
         else if( type == BusType.TIME ) {
-            value = timeFormat.parse( stringValue );
+            try {
+                value = LocalTime.parse( stringValue );
+            }
+            catch( DateTimeParseException ex ) {
+                throw new ParseException( stringValue, 0 );
+            }
         }
         else if( type == BusType.LIST ) {
             set( ListFormat.parse( stringValue ) );
@@ -126,8 +144,16 @@ public class BusValue {
         set( floatValue );
     }
 
-    public BusValue( Date dateValue, boolean date, boolean time ) {
-        set( dateValue, date, time );
+    public BusValue( LocalDate dateValue ) {
+        set( dateValue );
+    }
+
+    public BusValue( LocalDateTime localDateTime ) {
+        set( localDateTime );
+    }
+
+    public BusValue( LocalTime timeValue ) {
+        set( timeValue );
     }
 
     public BusValue( List<String> listValue ) {
@@ -144,22 +170,19 @@ public class BusValue {
         }
     }
 
-    private void set( Date dateValue, boolean date, boolean time ) {
-        if( !( date || time ) ) {
-            throw new RuntimeException( "Date or time or both must be set." );
-        }
-        if( date ) {
-            if( time ) {
-                type = BusType.DATETIME;
-            }
-            else {
-                type = BusType.DATE;
-            }
-        }
-        else {
-            type = BusType.TIME;
-        }
+    private void set( LocalDate dateValue ) {
+        type = BusType.DATE;
         value = dateValue;
+    }
+
+    private void set( LocalDateTime dateTimeValue ) {
+        type = BusType.DATETIME;
+        value = dateTimeValue;
+    }
+
+    private void set( LocalTime timeValue ) {
+        type = BusType.TIME;
+        value = timeValue;
     }
 
     private void set( Double floatValue ) {
@@ -223,13 +246,13 @@ public class BusValue {
             return "" + value;
         }
         else if( type == BusType.DATE ) {
-            return dateFormat.format( (Date) value );
+            return dateFormat.format( (LocalDate) value );
         }
         else if( type == BusType.DATETIME ) {
-            return dateTimeFormat.format( (Date) value );
+            return dateTimeFormat.format( (LocalDateTime) value );
         }
         else if( type == BusType.TIME ) {
-            return timeFormat.format( (Date) value );
+            return timeFormat.format( (LocalTime) value );
         }
         else if( type == BusType.LIST ) {
             return ListFormat.format( (List<String>) value );
@@ -249,8 +272,16 @@ public class BusValue {
         return value == null;
     }
 
-    public Date getDate() {
-        return (Date) value;
+    public LocalDate getDate() {
+        return (LocalDate) value;
+    }
+
+    public LocalDateTime getDateTime() {
+        return (LocalDateTime) value;
+    }
+
+    public LocalTime getTime() {
+        return (LocalTime) value;
     }
 
     public List<String> getList() {

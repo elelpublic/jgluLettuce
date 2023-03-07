@@ -5,6 +5,7 @@ import org.junit.Test;
 import java.text.ParseException;
 
 import static com.infodesire.jglu.util.DateTimeUtils.d;
+import static com.infodesire.jglu.util.DateTimeUtils.t;
 import static com.infodesire.jglu.util.ListUtils.l;
 import static org.junit.Assert.*;
 
@@ -105,19 +106,17 @@ public class BusValueTest {
 
         // normal -------------------------------------------------------
 
-        assertEquals( "2023-03-07", new BusValue( d( 2023, 3, 7 ), true, false ).toString() );
-        assertEquals( "2023-03-07", new BusValue( d( 2023, 3, 7, 12, 11, 20 ), true, false ).toString() );
+        assertEquals( "2023-03-07", new BusValue( d( 2023, 3, 7 ) ).toString() );
 
         assertEquals( d( 2000, 1, 1 ), new BusValue( BusType.DATE, "2000-01-01" ).getDate() );
-        assertEquals( d( 2000, 1, 1 ), new BusValue( BusType.DATE, "2000-01-01_07-20-00" ).getDate() );
 
         // exceptions -------------------------------------------------------
 
         try {
-            new BusValue( null, false, false );
-            fail( "There should be an exception when both date and time are false." );
+            new BusValue( BusType.DATE, "2000-01-01_07-20-00" );
+            fail( "There should be a parse exception." );
         }
-        catch( RuntimeException ignored ) {}
+        catch( ParseException ignored ) {}
 
         try {
             new BusValue( BusType.DATE, "abc" );
@@ -141,18 +140,11 @@ public class BusValueTest {
 
         // normal -------------------------------------------------------
 
-        assertEquals( "2023-03-07_00:00:00", new BusValue( d( 2023, 3, 7 ), true, true ).toString() );
-        assertEquals( "2023-03-07_12:11:20", new BusValue( d( 2023, 3, 7, 12, 11, 20 ), true, true ).toString() );
+        assertEquals( "2023-03-07T12:11:20", new BusValue( d( 2023, 3, 7, 12, 11, 20 ) ).toString() );
 
-        assertEquals( d( 2000, 1, 1, 7, 20, 0 ), new BusValue( BusType.DATETIME, "2000-01-01_07:20:00" ).getDate() );
+        assertEquals( d( 2000, 1, 1, 7, 20, 0 ), new BusValue( BusType.DATETIME, "2000-01-01T07:20:00" ).getDateTime() );
 
         // exceptions -------------------------------------------------------
-
-        try {
-            new BusValue( null, false, false );
-            fail( "There should be an exception when both date and time are false." );
-        }
-        catch( RuntimeException ignored ) {}
 
         try {
             new BusValue( BusType.DATETIME, "abc" );
@@ -168,7 +160,7 @@ public class BusValueTest {
 
         // null and empty handling -------------------------------------------------------
 
-        assertFalse( new BusValue( BusType.DATETIME, "1997-06-04_10:12:20" ).isNull() );
+        assertFalse( new BusValue( BusType.DATETIME, "1997-06-04T10:12:20" ).isNull() );
         assertEquals( "", new BusValue( BusType.DATETIME, null ).toString() );
         assertTrue( new BusValue( BusType.DATETIME, null ).isNull() );
         assertNull( new BusValue( BusType.DATETIME, null ).getDate() );
@@ -181,18 +173,12 @@ public class BusValueTest {
 
         // normal -------------------------------------------------------
 
-        assertEquals( "12:10:41", new BusValue( d( 0, 0, 0, 12, 10, 41 ), false, true ).toString() );
-        assertEquals( "12:11:20", new BusValue( d( 2023, 3, 7, 12, 11, 20 ), false, true ).toString() );
+        assertEquals( "12:10:41", new BusValue( t( 12, 10, 41 ) ).toString() );
+        assertEquals( "12:11:20", new BusValue( t( 12, 11, 20 ) ).toString() );
 
-        assertEquals( d( 1970, 1, 1, 7, 20, 0 ), new BusValue( BusType.TIME, "07:20:00" ).getDate() );
+        assertEquals( t( 7, 20, 0 ), new BusValue( BusType.TIME, "07:20:00" ).getTime() );
 
         // exceptions -------------------------------------------------------
-
-        try {
-            new BusValue( null, false, false );
-            fail( "There should be an exception when both date and time are false." );
-        }
-        catch( RuntimeException ignored ) {}
 
         try {
             new BusValue( BusType.TIME, "abc" );

@@ -1,19 +1,23 @@
 package com.infodesire.jglu.util;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.Calendar;
 import java.util.Date;
 
 public class DateTimeUtils {
 
-    public static Date d( int year, int month, int day ) {
-        return new Calendar.Builder().setDate( year, month - 1, day ).build().getTime();
+    public static LocalDate d( int year, int month, int day ) {
+        return LocalDate.of( year, month, day );
     }
 
-    public static Date d( int year, int month, int day, int hour, int minute, int second ) {
-        return new Calendar.Builder()
-                .setDate( year, month - 1, day )
-                .setTimeOfDay( hour, minute, second )
-                .build().getTime();
+    public static LocalDateTime d( int year, int month, int day, int hour, int minute, int second ) {
+        return LocalDateTime.of( year, month, day, hour, minute, second );
+    }
+
+    public static LocalTime t( int hour, int minute, int second ) {
+        return LocalTime.of( hour, minute, second );
     }
 
 }
