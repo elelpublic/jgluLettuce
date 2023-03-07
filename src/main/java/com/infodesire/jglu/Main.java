@@ -152,7 +152,8 @@ public class Main {
           line = line.substring( 6 ).trim();
 
           keys = connection.sync().keys( line );
-          System.out.println( "Found " + keys.size() );
+          int total = keys.size();
+          System.out.println( "Found " + total );
           System.out.println( "To delete them all enter DELETE_THEM_ALL!" );
           line = in.readLine();
           int index = 1;
@@ -164,8 +165,9 @@ public class Main {
                 long t1 = System.currentTimeMillis();
                 long time = t1 - t0;
                 long count = index - c0;
-                double rate = ( (double) count / (double) time ) * 1000;
-                System.out.println( rate + " del/s" );
+                double rate = Math.round( ( (double) count / (double) time ) * 1000 );
+                double percent = Math.round( (double) index / (double) total );
+                System.out.println( index + "/" + total + " (" + percent + ") " + rate + " del/s" );
                 t0 = t1;
                 c0 = index;
               }
