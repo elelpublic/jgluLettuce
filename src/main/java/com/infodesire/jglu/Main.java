@@ -80,6 +80,7 @@ public class Main {
 
       while( true ) {
 
+        System.out.println( "" );
         System.out.println( "(? for help)" );
         System.out.println( "jglu> " );
 

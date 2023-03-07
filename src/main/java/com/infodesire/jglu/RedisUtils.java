@@ -7,11 +7,17 @@ import io.lettuce.core.RedisURI;
 import io.lettuce.core.api.StatefulRedisConnection;
 import io.lettuce.core.pubsub.StatefulRedisPubSubConnection;
 
+import java.util.Map;
+
 /**
  * Some boilerplate code for working with redis via lettuce
  *
  */
 public class RedisUtils {
+
+    public static boolean SIMULATE_HSET_WITH_EMBEDDED_REDIS
+            = Boolean.valueOf( System.getProperty(
+                    "com.infodesire.jglu.RedisUtils.SIMULATE_HSET_WITH_EMBEDDED_REDIS", "false" ) );
 
     public static RedisURI createURI( String host, int port, String user, String password ) {
         RedisURI uri = new RedisURI( host, port, RedisURI.DEFAULT_TIMEOUT_DURATION );
@@ -24,9 +30,47 @@ public class RedisUtils {
         return uri;
     }
 
+
     public static RedisClient createClient( String host, int port, String user, String password ) {
         return RedisClient.create( createURI( host, port, user, password ) );
     }
+
+
+    /**
+     * Store a map in redis
+     *
+     * @param connection Redis connection
+     * @param key Key ob data
+     * @param map Map of data
+     */
+    public static void setMap( StatefulRedisConnection connection, String key,
+                        Map<String, String> map ) {
+
+        if( SIMULATE_HSET_WITH_EMBEDDED_REDIS ) {
+            // embedded redis seems to not support setting multiple hash entries at once
+            for( Map.Entry<String, String> entry : map.entrySet() ) {
+                connection.sync().hset( key, entry.getKey(), entry.getValue() );
+            }
+        }
+        else {
+            connection.sync().hset( key, map );
+        }
+
+    }
+
+
+    /**
+     * Load map from redis
+     *
+     * @param connection Redis connection
+     * @param key Data key
+     * @return Map at key or empty map if nothing was found on key
+     *
+     */
+    public static Map<String, String> getMap( StatefulRedisConnection connection, String key ) {
+        return connection.sync().hgetall( key );
+    }
+
 
     /**
      * Subscribe to one channel

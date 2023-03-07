@@ -1,5 +1,7 @@
 package com.infodesire.jglu;
 
+import com.infodesire.jglu.busdata.BusObject;
+import com.infodesire.jglu.busdata.BusUtils;
 import com.infodesire.jglu.pubsub.CollectingPubSubListener;
 import com.infodesire.jglu.pubsub.PubSubMessage;
 import static com.infodesire.jglu.pubsub.PubSubMessage.Type.*;
@@ -11,6 +13,9 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import redis.embedded.RedisServer;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import static org.junit.Assert.*;
 
@@ -112,5 +117,31 @@ public class RedisUtilsTest {
         assertTrue( listener.isEmpty() ); // no longer subscribed
 
     }
+
+    @Test
+    public void testMap() {
+
+        RedisUtils.SIMULATE_HSET_WITH_EMBEDDED_REDIS = true;
+
+        RedisClient client = RedisUtils.createClient( "localhost", port, null, null );
+        StatefulRedisConnection<String, String> connection = client.connect();
+
+        assertTrue( connection.sync().hgetall( "myMap" ).isEmpty() );
+
+        Map<String, String> map = new HashMap<>();
+        map.put( "Id", "1210" );
+        map.put( "Name", "Oldham" );
+
+        RedisUtils.setMap( connection, "myMap", map );
+        assertTrue( 1 == connection.sync().exists( "myMap" ) );
+        assertEquals( 2, connection.sync().hgetall( "myMap" ).size() );
+
+        Map<String, String> map2 = RedisUtils.getMap( connection, "myMap" );
+        assertEquals( 2, map2.size() );
+        assertEquals( "1210", map.get( "Id") );
+        assertEquals( "Oldham", map.get( "Name" ) );
+
+    }
+
 
 }

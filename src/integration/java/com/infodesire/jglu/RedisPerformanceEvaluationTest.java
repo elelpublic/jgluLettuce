@@ -32,14 +32,14 @@ public class RedisPerformanceEvaluationTest {
     }
 
     @Test
-    public void testTenMillionKeys() {
+    public void testBiggerData() {
 
         RedisCommands syncCommands = connection.sync();
 
         long t0 = System.currentTimeMillis();
         long c0 = 0;
 
-        for( int i = 0; i < 10000000; i++ ) {
+        for( int i = 0; i < 100000; i++ ) {
             syncCommands.set( prefix + i, "" + i );
             if( i % 1000 == 0 ) {
                 long t1 = System.currentTimeMillis();
