@@ -21,7 +21,7 @@ public class RedisBasedCacheWithRealRedisIntegrationTest {
     @BeforeClass
     public static void beforeClass() {
         prefix = "RedisBasedCacheWithRealRedisIntegrationTest." + System.currentTimeMillis() + ".";
-        redisClient = RedisClient.create("redis://password@localhost:6379/0");
+        redisClient = RedisClient.create("redis://localhost:6379/0");
         connection = redisClient.connect();
     }
     

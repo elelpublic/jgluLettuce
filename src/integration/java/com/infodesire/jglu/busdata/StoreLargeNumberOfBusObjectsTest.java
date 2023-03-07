@@ -1,6 +1,5 @@
 package com.infodesire.jglu.busdata;
 
-import com.infodesire.jglu.RedisBasedCache;
 import io.lettuce.core.RedisClient;
 import io.lettuce.core.api.StatefulRedisConnection;
 import io.lettuce.core.api.sync.RedisCommands;
@@ -10,11 +9,7 @@ import org.junit.Test;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-
-import static com.infodesire.jglu.util.DateTimeUtils.d;
-import static org.junit.Assert.*;
 
 public class StoreLargeNumberOfBusObjectsTest {
 
@@ -26,7 +21,7 @@ public class StoreLargeNumberOfBusObjectsTest {
     @BeforeClass
     public static void beforeClass() {
         prefix = "RedisBasedCacheWithRealRedisIntegrationTest." + System.currentTimeMillis() + ".";
-        redisClient = RedisClient.create("redis://password@localhost:6379/0");
+        redisClient = RedisClient.create("redis://localhost:6379/0");
         connection = redisClient.connect();
     }
     

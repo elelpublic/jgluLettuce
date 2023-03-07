@@ -164,7 +164,7 @@ public class Main {
                 long t1 = System.currentTimeMillis();
                 long time = t1 - t0;
                 long count = index - c0;
-                long rate = ( count / time ) * 1000;
+                double rate = ( (double) count / (double) time ) * 1000;
                 System.out.println( rate + " del/s" );
                 t0 = t1;
                 c0 = index;
