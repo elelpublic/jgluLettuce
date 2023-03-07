@@ -71,7 +71,7 @@ public class Main {
 
   private static void interactiveShell() throws IOException {
 
-    RedisClient redisClient = RedisClient.create( "redis://password@localhost:6379/0" );
+    RedisClient redisClient = RedisClient.create( "redis://localhost:6379/0" );
     StatefulRedisConnection<String, String> connection = redisClient.connect();
 
     try {
