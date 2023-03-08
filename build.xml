@@ -55,12 +55,6 @@
         />
     </target>
 
-    <target name="hello.groovy" depends="setup.groovy">
-        <groovy>
-            System.out.println( "Hello? Groovy speaking here" );
-        </groovy>
-    </target>
-
     <target name="fetchlibs" depends="tools.install, setup.ivy" unless="fetchlibs.done">
 
         <ivy:retrieve log="quiet"/>
@@ -104,6 +98,24 @@
             <classpath refid="thirdparty.jars"/>
             <classpath refid="junit.jars"/>
         </javac>
+    </target>
+
+    <target name="jar" depends="compile">
+        <tstamp>
+            <format property="touch.time" pattern="dd.MM.yyyy HH:mm:ss"/>
+        </tstamp>
+
+        <jar
+                jarfile="target/jglu-${jglu.version}.jar"
+                basedir="target/classes"
+        >
+            <manifest>
+                <attribute name="Create-Timestamp" value="${touch.time}"/>
+                <attribute name="Main-Class" value="com.infodesire.jvmcom.Main"/>
+                <attribute name="Class-Path"
+                           value="commons-cli-${commons-cli.version}.jar commons-lang3-${commons-lang3.version}.jar slf4j-api-${slf4j.version}.jar slf4j-simple-${slf4j.version}.jar"/>
+            </manifest>
+        </jar>
     </target>
 
     <target name="cli" depends="test-quietly">
@@ -270,17 +282,86 @@
 
     <target name="help" depends="usage" />
 
+    <target name="src.jar" depends="properties" >
+        <jar destfile="target/jglu-${jglu.version}-sources.jar">
+            <fileset dir="src"></fileset>
+        </jar>
+    </target>
+
+
+    <target
+            name="publish"
+            depends="jar, src.jar"
+            description="publish to team repo"
+    >
+
+        <property name="publish.team.path.jars" value="maven/com.infodesire.jglu/jars/" />
+        <property name="publish.team.path.sources" value="maven/com.infodesire.jglu/sources/" />
+
+        <property file="${user.home}/.bsm/teamserver.properties" />
+
+        <property name="publish.team.server" value="SERVERNAME" />
+        <property name="publish.team.port" value="22" />
+        <property name="publish.team.user" value="USERNAME" />
+        <property name="publish.team.keyfile" value="~/.ssh/id_rsa" />
+
+        <echo>.
+            What to check, if upload fails:
+            - is the server ${publish.team.server} reachable from this machine?
+            - is the public ssh key of the current user deployed on the team server .ssh/authorized_keys?
+            - is the public ssh key of the current user available in the file ${publish.team.keyfile}
+
+            To provide different settings for the team server connection, create of modify these in the
+            file: ~/.bsm/teamserver.properties:
+
+            --------------------------------------------------------------------
+            publish.team.server=SERVERNAME
+            publish.team.port=22
+            publish.team.user=USERNAME
+            publish.team.path.jars=maven/com.infodesire.jvmcom/jars/
+            publish.team.path.sources=maven/com.infodesire.jvmcom/sources/
+            --------------------------------------------------------------------
+        </echo>
+
+        <!-- copy binary -->
+        <echo>Uploading target/jglu-${jglu.version}.jar to ${publish.team.user}@${publish.team.server}:${publish.team.path.jars}</echo>
+        <scp
+                file="target/jglu-${jglu.version}.jar"
+                todir="${publish.team.user}@${publish.team.server}:${publish.team.path.jars}"
+                keyfile="${publish.team.keyfile}"
+                verbose="false"
+                trust="true"
+                failonerror="true"
+                port="${publish.team.port}"
+        />
+
+        <!-- copy sources -->
+        <echo>Uploading target/jglu-${jglu.version}-sources.jar to ${publish.team.user}@${publish.team.server}:${publish.team.path.sources}</echo>
+        <scp
+                file="target/jglu-${jglu.version}-sources.jar"
+                todir="${publish.team.user}@${publish.team.server}:${publish.team.path.sources}"
+                keyfile="${publish.team.keyfile}"
+                verbose="false"
+                trust="true"
+                failonerror="true"
+                port="${publish.team.port}"
+        />
+
+    </target>
+
     <target name="usage">
         <echo>
 
-Sample project using ant and ivy
+jglu - The glue between JVMs
 
 ant tools.install ............. Install tools: ivy
-ant hello.groovy .............. Test the groovy installation
 ant clean ..................... Delete generated files
 ant clean.all ................. Delete all generated or downloaded files
+ant jar ....................... Build project jar file
+ant publish ................... Publish artifacts to team repo
 ant test ...................... Run unit tests
-ant cli ....................... Run interactive mode
+ant integration ............... Run integration tests (needs a redis)
+ant cli ....................... Run interactive redis client
 
         </echo>
     </target>
