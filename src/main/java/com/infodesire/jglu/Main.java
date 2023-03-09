@@ -1,6 +1,10 @@
 package com.infodesire.jglu;
 
+import com.infodesire.jglu.util.CliUtils;
+import io.lettuce.core.KeyScanCursor;
 import io.lettuce.core.RedisClient;
+import io.lettuce.core.ScanArgs;
+import io.lettuce.core.ScanCursor;
 import io.lettuce.core.api.StatefulRedisConnection;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
@@ -17,7 +21,9 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.InetAddress;
+import java.util.Deque;
 import java.util.List;
+import java.util.Map;
 
 public class Main {
 
@@ -77,113 +83,216 @@ public class Main {
     try {
 
       BufferedReader in = new BufferedReader( new InputStreamReader( System.in ) );
+      long time0 = -1;
 
       while( true ) {
 
-        System.out.println( "" );
-        System.out.println( "(? for help)" );
-        System.out.println( "jglu> " );
+        if( time0 != -1 ) {
+          // show total runtime of last command
+          long time1 = System.currentTimeMillis();
+          long runtime = time1 - time0;
+          print( "" );
+          print( "execution time: " + runtime + "ms" );
+        }
+
+        print( "" );
+        print( "(? for help)" );
+        print( "jglu> " );
 
         String line = in.readLine().trim();
-        System.out.println( "" );
+        Deque<String> input = CliUtils.parseCommandLine( line );
 
-        if( line.equalsIgnoreCase( "exit" ) ) {
-          return;
-        }
-
+        print( "" );
+        time0 = System.currentTimeMillis();
         List<String> keys;
-        if( line.equalsIgnoreCase( "?" ) || line.equalsIgnoreCase( "help" ) ) {
-          showCommands();
-        }
-        else if( line.startsWith( "set " ) ) {
-          line = line.substring( 3 ).trim();
 
-          int sep = line.indexOf( " " );
-          if( sep == -1 ) {
-            System.out.println( "Syntax error in line: set " + line );
+        try {
+          
+          if( input.size() == 0 ) {
             showCommands();
           }
           else {
-            String key = line.substring( 0, sep ).trim();
-            String value = line.substring( sep ).trim();
-            connection.sync().set( key, value );
-            System.out.println( "OK" );
-          }
 
-        }
-        else if( line.startsWith( "get " ) ) {
-          line = line.substring( 3 ).trim();
-
-          System.out.println( line + ": " + connection.sync().get( line ) );
-
-        }
-        else if( line.startsWith( "del " ) ) {
-          line = line.substring( 3 ).trim();
-
-          Long count = connection.sync().del( line );
-          System.out.println( "Deleted " + count + " keys" );
-
-        }
-        else if( line.startsWith( "has " ) ) {
-          line = line.substring( 3 ).trim();
-
-          System.out.println( line + " exists: " + ( ( connection.sync().exists( line ) == 1 ) ) );
-
-        }
-        else if( line.startsWith( "find " ) ) {
-          line = line.substring( 4 ).trim();
-
-          keys = connection.sync().keys( line );
-          int index = 1;
-          for( String key : keys ) {
-            System.out.println( "#" + index + ": " + key );
-            index++;
-          }
-
-        }
-        else if( line.startsWith( "count " ) ) {
-          line = line.substring( 5 ).trim();
-
-          int count = connection.sync().keys( line ).size();
-          System.out.println( count );
-
-        }
-        else if( line.startsWith( "delall " ) ) {
-          line = line.substring( 6 ).trim();
-
-          keys = connection.sync().keys( line );
-          int total = keys.size();
-          System.out.println( "Found " + total );
-          System.out.println( "To delete them all enter DELETE_THEM_ALL!" );
-          line = in.readLine();
-          int index = 1;
-          if( line.trim().equals( "DELETE_THEM_ALL!" ) ) {
-            long t0 = System.currentTimeMillis();
-            long c0 = 0;
-            for( String key : keys ) {
-              if( index % 1000 == 0 ) {
-                long t1 = System.currentTimeMillis();
-                long time = t1 - t0;
-                long count = index - c0;
-                int rate = (int) Math.round( ( (double) count / (double) time ) * 1000 );
-                int percent = (int) Math.round( ( (double) index / (double) total ) * 100.0 );
-                System.out.println( index + "/" + total + " (" + percent + " %) " + rate + " del/s" );
-                t0 = t1;
-                c0 = index;
-              }
-              connection.sync().del( key );
-              index++;
+            String command = input.pop();
+            
+            if( command.equals( "exit" ) ) {
+              return;
             }
-            System.out.println( "Deleted " + keys.size() + " keys." );
-          }
-          else {
-            System.out.println( "Code was not DELETE_THEM_ALL! - so will NOT delete." );
+            else if( command.equals( "?" ) || command.equals( "help" ) ) {
+              showCommands();
+            }
+            else if( command.equals( "set" ) ) {
+
+              boolean ok = false;
+              if( !input.isEmpty() ) {
+                String key = input.pop();
+                if( !input.isEmpty() ) {
+                  String value = input.pop();
+                  connection.sync().set( key, value );
+                  ok = true;
+                }
+              }
+
+              if( ok ) {
+                print( "OK" );
+              }
+              else {
+                showCommands( "Syntax error in line: " + line );
+              }
+
+            }
+            else if( command.equals( "get" ) ) {
+
+              if( !input.isEmpty() ) {
+                print( line + ": " + connection.sync().get( input.pop() ) );
+              }
+              else {
+                showCommands( "Syntax error in line: " + line );
+              }
+
+            }
+            else if( command.equals( "hgetall" ) ) {
+
+              if( !input.isEmpty() ) {
+                Map<String, String> fields = connection.sync().hgetall( input.pop() );
+                for( Map.Entry<String, String> entry : fields.entrySet() ) {
+                  print( entry.getKey() + ": " + entry.getKey() );
+                }
+              }
+              else {
+                showCommands( "Syntax error in line: " + line );
+              }
+
+
+            }
+            else if( command.equals( "del" ) ) {
+
+              if( !input.isEmpty() ) {
+                Long count = connection.sync().del( input.pop() );
+                print( "Deleted " + count + " keys" );
+              }
+              else {
+                showCommands( "Syntax error in line: " + line );
+              }
+
+            }
+            else if( command.equals( "has" ) ) {
+
+              if( !input.isEmpty() ) {
+                print( line + " exists: " + connection.sync().exists( input.pop() )  );
+              }
+              else {
+                showCommands( "Syntax error in line: " + line );
+              }
+
+            }
+            else if( command.equals( "keys" ) ) {
+
+              if( !input.isEmpty() ) {
+                keys = connection.sync().keys( input.pop() );
+                int index = 1;
+                for( String key : keys ) {
+                  print( "#" + index + ": " + key );
+                  index++;
+                }
+                print( "total keys found: " + keys.size() );
+              }
+              else {
+                showCommands( "Syntax error in line: " + line );
+              }
+
+            }
+            else if( command.equals( "scan" )
+                    || command.equals( "scancount" ) ) {
+
+              boolean quiet = command.equals( "scancount" );
+
+              boolean ok = false;
+              if( !input.isEmpty() ) {
+                String cursor = input.pop();
+                if( !input.isEmpty() ) {
+                  String match = input.pop();
+                  ScanArgs scanArgs = new ScanArgs();
+                  scanArgs.match( match );
+                  if( !input.isEmpty() ) {
+                    scanArgs.limit( Long.parseLong( input.pop() ) );
+                  }
+                  ScanCursor scanCursor = new ScanCursor( cursor, false );
+                  KeyScanCursor<String> c = connection.sync().scan( scanCursor, scanArgs );
+                  int index = 1;
+                  List<String> keysScanned = c.getKeys();
+                  for( String keyScanned : keysScanned ) {
+                    if( !quiet ) {
+                      print( "#" + index + ": " + keyScanned );
+                    }
+                    index++;
+                  }
+                  print( "keys scanned: " + keysScanned.size() );
+                }
+
+              }
+              else {
+                showCommands( "Syntax error in line: " + line );
+              }
+
+            }
+            else if( command.equals( "count" ) ) {
+
+              if( !input.isEmpty() ) {
+                int count = connection.sync().keys( input.pop() ).size();
+                print( "" + count );
+              }
+              else {
+                showCommands( "Syntax error in line: " + line );
+              }
+
+            }
+            else if( command.equals( "delall" ) ) {
+
+              if( !input.isEmpty() ) {
+                keys = connection.sync().keys( input.pop() );
+                int total = keys.size();
+                print( "Found " + total );
+                print( "To delete them all enter DELETE_THEM_ALL!" );
+                line = in.readLine();
+                int index = 1;
+                if( line.trim().equals( "DELETE_THEM_ALL!" ) ) {
+                  long t0 = System.currentTimeMillis();
+                  long c0 = 0;
+                  for( String key : keys ) {
+                    if( index % 1000 == 0 ) {
+                      long t1 = System.currentTimeMillis();
+                      long time = t1 - t0;
+                      long count = index - c0;
+                      int rate = (int) Math.round( ( (double) count / (double) time ) * 1000 );
+                      int percent = (int) Math.round( ( (double) index / (double) total ) * 100.0 );
+                      print( index + "/" + total + " (" + percent + " %) " + rate + " del/s" );
+                      t0 = t1;
+                      c0 = index;
+                    }
+                    connection.sync().del( key );
+                    index++;
+                  }
+                  print( "Deleted " + keys.size() + " keys." );
+                }
+                else {
+                  print( "Code was not DELETE_THEM_ALL! - so will NOT delete." );
+                }
+              }
+              else {
+                showCommands( "Syntax error in line: " + line );
+              }
+
+            }
+            else {
+              showCommands( "Unknown command " + line );
+            }
+            
           }
 
         }
-        else {
-          System.out.println( "Unknown command " + line );
-          showCommands();
+        catch( Throwable ex ) {
+          ex.printStackTrace();
         }
 
       }
@@ -201,18 +310,34 @@ public class Main {
   }
 
   private static void showCommands() {
-    System.out.println( "" );
-    System.out.println( "Commands:" );
-    System.out.println( "? or help ............... show this help" );
-    System.out.println( "exit .................... leave interactive shell" );
-    System.out.println( "" );
-    System.out.println( "set key value ........... set key value pair" );
-    System.out.println( "get key ................. get key for value" );
-    System.out.println( "has key ................. test if key exists" );
-    System.out.println( "find pattern ............ find keys matching this pattern" );
-    System.out.println( "count pattern ........... count keys matching this pattern" );
-    System.out.println( "delall pattern .......... delete keys matching this pattern" );
-    System.out.println( "" );
+    showCommands( null );
+  }
+
+  private static void showCommands( String message ) {
+
+    print( "" );
+
+    if( message != null ) {
+      print( message );
+      print( "" );
+    }
+
+    print( "" );
+    print( "Commands:" );
+    print( "? or help ........................... show this help" );
+    print( "exit ................................ leave interactive shell" );
+    print( "" );
+    print( "set key value ....................... set key value pair" );
+    print( "get key ............................. get key for value" );
+    print( "hgetall key ......................... get all fields and values of a map with this pattern" );
+    print( "has key ............................. test if key exists" );
+    print( "keys pattern ........................ find keys matching this pattern" );
+    print( "scan cursor pattern [count] ......... scan keys matching this pattern (use 0 for initial cursor)" );
+    print( "scancount cursor pattern [count] .... scan keys matching this pattern (use 0 for initial cursor)" );
+    print( "count pattern ....................... count keys matching this pattern" );
+    print( "delall pattern ...................... delete keys matching this pattern" );
+    print( "" );
+
   }
 
 

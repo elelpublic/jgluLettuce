@@ -118,7 +118,7 @@
         </jar>
     </target>
 
-    <target name="cli" depends="test-quietly">
+    <target name="cli" depends="compile">
         <property name="commandline" value="-i" />
         <java
             classpath="target/classes"
